@@ -30,4 +30,6 @@ Route::group(['middleware' => ['dokter']], function() {
 	Route::get('dokter/profile/{id}', 'API\DokterController@getDokterByID');
 	Route::get('dokter/antrian', 'API\DokterController@getAntrianPasien');
 	Route::get('dokter/antrian/detail/{id}', 'API\DokterController@getDetailAntrian');
+	Route::post('dokter/periksa/fisik', 'API\DokterController@storePemeriksaanFisik');
+	Route::post('dokter/periksa/poedjirochjati', 'API\DokterController@storePoedjiRochjati');
 });
