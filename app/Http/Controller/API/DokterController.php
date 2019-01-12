@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Keluhan;
 use App\TransMedisFisik;
+use App\TransPudji;
 use App\Masukan;
 use Validator;
 
@@ -31,6 +32,7 @@ class DokterController extends Controller
                 'nama' => $item->user->name,
                 'deskripsi' => $item->deskripsi,
                 'tanggal' => $item->tanggal,
+                'alamat' => $item->user->alamat_tinggal,
                 'no_telp' => $item->user->no_telp,
             ];
         }
@@ -39,14 +41,14 @@ class DokterController extends Controller
     
     public function getDetailAntrian($id) {
         $detail = Keluhan::find($id);
-        $pasien = User::find($detail->id);
         return response()->json([
             'id' => $detail->id,
             'id_keluhan' => $detail->id_keluhan,
-            'nama' => $pasien->name,
+            'nama' => $detail->user->name,
             'deskripsi' => $detail->deskripsi,
             'tanggal' => $detail->tanggal,
-            'no_telp' => $pasien->no_telp,
+            'alamat' => $detail->user->alamat_tinggal,
+            'no_telp' => $detail->user->no_telp,
         ], $this->successStatus);
     }
 
