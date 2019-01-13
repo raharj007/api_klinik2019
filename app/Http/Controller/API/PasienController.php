@@ -104,12 +104,8 @@ class PasienController extends Controller
         $kritik_saran->id_user = $request->id_user;
         $kritik_saran->deskripsi = $request->deskripsi;
         $kritik_saran->tanggal = $request->tanggal;
-        if ($kritik_saran->save()) {
-            $success['status'] = 'data berhasil dimasukkan';
-            return response()->json(['status' => $success['status']], $this->successStatus);
-        } else {
-            $success['status'] = 'data gagal dimasukkan';
-            return response()->json(['status' => $success['status']], 401);
-        }
+        $is_saved = $kritik_saran->save();
+
+        return $is_saved ? response()->json(['status' => 'Data berhasil dimasukkan'], $this->successStatus) : response()->json(['status' => 'Data gagal dimasukkan', $this->successStatus]);
     }
 }

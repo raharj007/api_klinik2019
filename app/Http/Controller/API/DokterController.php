@@ -139,4 +139,47 @@ class DokterController extends Controller
 
         return $is_saved ? response()->json(['status' => 'Data berhasil disimpan'], $this->successStatus) : response()->json(['status' => 'Data gagal disimpan'], $this->successStatus);
     }
+
+    public function getListRekamMedic() {
+        $collection = User::where('roles', 'pasien')->get();
+        return response()->json($collection, $this->successStatus);
+    }
+
+    public function getUserRekamMedic($id) {
+        $rekamMedic = TransMedisFisik::where('users_id', $id)->get();
+        $data = [];
+        foreach ($rekamMedic as $item) {
+            $data[] = [
+                'id' => $item->id,
+                'trans_keluhan_id' => $item->trans_keluhan_id,
+                'users_id' => $item->users_id,
+                'tgl_pemeriksaan' => $item->tgl_pemeriksaan,
+                'deskripsi' => $item->keluhan->deskripsi,
+            ];
+        }
+        return response()->json($data, $this->successStatus);
+    }
+
+    public function getDetailsRekamMedic($id) {
+        $detail = TransMedisFisik::find($id);
+        return response()->json($detail, $this->successStatus);
+    }
+
+    public function storeKritikSaran(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'deskripsi' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => $validator->errors()], 401);
+        }
+
+        $kritik_saran = new Masukan();
+        $kritik_saran->id_user = $request->id_user;
+        $kritik_saran->deskripsi = $request->deskripsi;
+        $kritik_saran->tanggal = $request->tanggal;
+        $is_saved = $kritik_saran->save();
+
+        return $is_saved ? response()->json(['status' => 'Data berhasil dimasukkan'], $this->successStatus) : response()->json(['status' => 'Data gagal dimasukkan', $this->successStatus]);
+    }
 }
